@@ -5,5 +5,14 @@ namespace BracketMatcher.Tests
 {
     public class BracketMatcherTests
     {
+        [Fact]
+        public void TestName()
+        {
+        //Given
+        
+        //When
+        
+        //Then
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace BracketMatcher.Tests
@@ -6,7 +7,7 @@ namespace BracketMatcher.Tests
     public class BracketFinderTests
     {
         [Fact]
-        public void GetBracketIndex_StringHasBracket_ReturnOpenBracKetIndex()
+        public void GetBracketIndex_StringHasBracket_ReturnFirstBracKetIndex()
         {
             var content = "1(2{3})";
             var openBracket = "(";

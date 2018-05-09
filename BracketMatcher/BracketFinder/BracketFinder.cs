@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 namespace BracketMatcher
 {
     public class BracketFinder : IBracketFinder
     {
         public BracketFinder() { }
+
         public int GetBracketIndex(string content, string openBracket)
         {
             return content.IndexOf(openBracket);
