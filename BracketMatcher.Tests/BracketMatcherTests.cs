@@ -47,6 +47,12 @@ namespace BracketMatcher.Tests
         [Theory]
         [InlineData("(qweqwe", 0)]
         [InlineData("qw(eqwe", 2)]
+        [InlineData("qweqw)e", 5)]
+        [InlineData("qweqwe)", 6)]
+        [InlineData("{qweqwe", 0)]
+        [InlineData("qw[eqwe", 2)]
+        [InlineData("qweqw}e", 5)]
+        [InlineData("qweqwe]", 6)]
         public void WhenThereIsOneMissMatch_ReturnIndexOfTheMissMatchBracket(string str, int excepted)
         {
             //When
