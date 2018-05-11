@@ -19,34 +19,13 @@ namespace BracketMatcher
                 return 0;
             }
 
+            bracketStack = GetMissMatchBracket(str);
 
             if (_brackets.Any(a => a.Equals(str)))
             {
                 return 0;
             }
 
-            for (var i = 0; i <= str.ToCharArray().Length - 1; i++)
-            {
-                var s = str.ToCharArray()[i];
-                var bracket = new Bracket(s, i);
-                if (IsOpenBracket(s))
-                {
-                    bracketStack.Push(bracket);
-                }
-                if (IsCloseBracket(s))
-                {
-                    if (bracketStack.Count == 0)
-                    {
-                        bracketStack.Push(bracket);
-                        continue;
-                    }
-                    var openBracketInStack = (Bracket)bracketStack.Peek();
-                    if (IsBracketMatch(openBracketInStack.Character, s))
-                    {
-                        bracketStack.Pop();
-                    }
-                }
-            }
             if (bracketStack.Count == 0)
             {
                 return 0;
@@ -57,6 +36,34 @@ namespace BracketMatcher
                 return missMatchBracket.IndexInString;
             }
             return -1;
+        }
+
+        private Stack GetMissMatchBracket(string str)
+        {
+            var output = new Stack();
+            for (var i = 0; i <= str.ToCharArray().Length - 1; i++)
+            {
+                var s = str.ToCharArray()[i];
+                var bracket = new Bracket(s, i);
+                if (IsOpenBracket(s))
+                {
+                    output.Push(bracket);
+                }
+                if (IsCloseBracket(s))
+                {
+                    if (output.Count == 0)
+                    {
+                        output.Push(bracket);
+                        continue;
+                    }
+                    var openBracketInStack = (Bracket)output.Peek();
+                    if (IsBracketMatch(openBracketInStack.Character, s))
+                    {
+                        output.Pop();
+                    }
+                }
+            }
+            return output;
         }
 
         private bool IsOpenBracket(char bracket)
