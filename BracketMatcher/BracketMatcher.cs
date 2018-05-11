@@ -35,6 +35,11 @@ namespace BracketMatcher
                 }
                 if (IsCloseBracket(s))
                 {
+                    if (bracketStack.Count == 0)
+                    {
+                        bracketStack.Push(bracket);
+                        continue;
+                    }
                     var openBracketInStack = (Bracket)bracketStack.Peek();
                     if (IsBracketMatch(openBracketInStack.Character, s))
                     {
@@ -48,7 +53,7 @@ namespace BracketMatcher
             }
             if (bracketStack.Count > 0)
             {
-                var missMatchBracket =(Bracket)bracketStack.Peek();
+                var missMatchBracket = (Bracket)bracketStack.Peek();
                 return missMatchBracket.IndexInString;
             }
             return -1;
