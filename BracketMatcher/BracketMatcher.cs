@@ -25,16 +25,18 @@ namespace BracketMatcher
                 return 0;
             }
 
-            foreach (char s in str)
+            for (var i = 0; i <= str.ToCharArray().Length - 1; i++)
             {
+                var s = str.ToCharArray()[i];
+                var bracket = new Bracket(s, i);
                 if (IsOpenBracket(s))
                 {
-                    bracketStack.Push(s);
+                    bracketStack.Push(bracket);
                 }
                 if (IsCloseBracket(s))
                 {
-                    var openBracketInStack = (char)bracketStack.Peek();
-                    if (IsBracketMatch(openBracketInStack, s))
+                    var openBracketInStack = (Bracket)bracketStack.Peek();
+                    if (IsBracketMatch(openBracketInStack.Character, s))
                     {
                         bracketStack.Pop();
                     }
@@ -46,7 +48,8 @@ namespace BracketMatcher
             }
             if (bracketStack.Count > 0)
             {
-                return 0;
+                var missMatchBracket =(Bracket)bracketStack.Peek();
+                return missMatchBracket.IndexInString;
             }
             return -1;
         }
