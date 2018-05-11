@@ -45,12 +45,10 @@ namespace BracketMatcher.Tests
         }
 
         [Theory]
-        [InlineData("(qweqwe")]
-        public void WhenThereIsOneMissMatch_ReturnIndexOfTheMissMatchBracket(string str)
+        [InlineData("(qweqwe", 0)]
+        [InlineData("qw(eqwe", 2)]
+        public void WhenThereIsOneMissMatch_ReturnIndexOfTheMissMatchBracket(string str, int excepted)
         {
-            //Given
-            var excepted = 0;
-
             //When
             var actual = sub.Match(str);
 
