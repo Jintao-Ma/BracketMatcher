@@ -20,14 +20,21 @@ namespace BracketMatcher.Tests
             Assert.Equal(excepted, actual);
         }
 
-        [Fact]
-        public void WhenBracketMatch_ReturnZero()
+        [Theory] 
+        [InlineData("{}")]
+        [InlineData("[]")]
+        [InlineData("()")]
+        [InlineData("(qwe)")]
+        [InlineData("()wqwee")]
+        [InlineData("wqwee()")]
+        [InlineData("wwee()213")]
+        public void WhenBracketMatch_ReturnZero(string str)
         {
             //Given
             var excepted = 0;
 
             //When
-            var actual = sub.Match("()");
+            var actual = sub.Match(str);
 
             //Then
             Assert.Equal(excepted, actual);
