@@ -53,6 +53,10 @@ namespace BracketMatcher.Tests
         [InlineData("qw[eqwe", 2)]
         [InlineData("qweqw}e", 5)]
         [InlineData("qweqwe]", 6)]
+        [InlineData("qw(e)qwe]", 8)]
+        [InlineData("{}qw(e)qwe]", 10)]
+        [InlineData("{qw(e)qwe[]", 0)]
+        [InlineData("wq{q[w(e)q]we[]", 2)]
         public void WhenThereIsOneMissMatch_ReturnIndexOfTheMissMatchBracket(string str, int excepted)
         {
             //When
@@ -61,5 +65,15 @@ namespace BracketMatcher.Tests
             //Then
             Assert.Equal(excepted, actual);
         }
+
+        // [Theory]
+        // public void WhenThereAreMoreThanOneMissMatch_ReturnAllIndexOfTheMissMatchBrackets(string str, int[] excepted)
+        // {
+        //     //Given
+
+        //     //When
+
+        //     //Then
+        // }
     }
 }
