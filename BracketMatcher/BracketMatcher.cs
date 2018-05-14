@@ -13,59 +13,105 @@ namespace BracketMatcher
 
         public int Match(string str)
         {
-            var bracketStack = new Stack();
             if (string.IsNullOrEmpty(str))
             {
                 return 0;
             }
+            return FindFirstMissMatchBracket(str);
+        }
 
-            bracketStack = GetMissMatchBracket(str);
+        private int FindFirstMissMatchBracket(string str)
+        {
+            var bracketStack = new Stack();
 
-            if (_brackets.Any(a => a.Equals(str)))
+            bracketStack = CreateMissMatchBracketStack(str);
+
+            if (BracketStackDoesNotHasMatchBrackets(bracketStack, str))
             {
                 return 0;
             }
 
-            if (bracketStack.Count == 0)
-            {
-                return 0;
-            }
             if (bracketStack.Count > 0)
             {
-                var missMatchBracket = (Bracket)bracketStack.Peek();
-                return missMatchBracket.IndexInString;
+                return GetFirstMissMatchBracketIndex(bracketStack);
             }
             return -1;
         }
 
-        private Stack GetMissMatchBracket(string str)
+        private Stack CreateMissMatchBracketStack(string str)
         {
-            var output = new Stack();
+            var bracketStack = new Stack();
             for (var i = 0; i <= str.ToCharArray().Length - 1; i++)
             {
                 var s = str.ToCharArray()[i];
                 var bracket = new Bracket(s, i);
-                if (IsOpenBracket(s))
-                {
-                    output.Push(bracket);
-                }
-                if (IsCloseBracket(s))
-                {
-                    if (output.Count == 0)
-                    {
-                        output.Push(bracket);
-                        continue;
-                    }
-                    var openBracketInStack = (Bracket)output.Peek();
-                    if (IsBracketMatch(openBracketInStack.Character, s))
-                    {
-                        output.Pop();
-                    }
-                }
+                bracketStack = PushBracketIntoBracketStack(bracketStack, bracket);
+            }
+            return bracketStack;
+        }
+
+        private Stack PushBracketIntoBracketStack(Stack bracketStack, Bracket bracket)
+        {
+            var output = bracketStack;
+            var bracketCharacter = bracket.Character;
+            if (IsOpenBracket(bracketCharacter))
+            {
+                output = PushOpenBracketIntoBracketStack(bracketStack, bracket);
+            }
+            if (IsCloseBracket(bracketCharacter))
+            {
+                output = PushCloseBracketIntoBracketStack(bracketStack, bracket);
             }
             return output;
         }
 
+        private bool BracketStackDoesNotHasMatchBrackets(Stack bracketStack, string str)
+        {
+            return (_brackets.Any(a => a.Equals(str))) || bracketStack.Count == 0;
+        }
+
+        private int GetFirstMissMatchBracketIndex(Stack bracketStack)
+        {
+            var firstMissMatchBracket = (Bracket)bracketStack.Peek();
+            return firstMissMatchBracket.IndexInString;
+        }
+
+        private Stack PushOpenBracketIntoBracketStack(Stack bracketStack, Bracket openBracket)
+        {
+            var output = bracketStack;
+            output.Push(openBracket);
+            return output;
+        }
+
+        private Stack PushCloseBracketIntoBracketStack(Stack bracketStack, Bracket closeBracket)
+        {
+            var output = bracketStack;
+            if (HasMatchOpenBracketInStack(bracketStack, closeBracket))
+            {
+                output.Pop();
+            }
+            else
+            {
+                output.Push(closeBracket);
+            }
+            return output;
+        }
+
+        private bool HasMatchOpenBracketInStack(Stack bracketStack, Bracket closeBracket)
+        {
+            if (bracketStack.Count == 0)
+            {
+                return false;
+            }
+
+            var openBracketInStack = (Bracket)bracketStack.Peek();
+            if (IsBracketMatch(openBracketInStack.Character, closeBracket.Character))
+            {
+                return true;
+            }
+
+            return false;
+        }
         private bool IsOpenBracket(char bracket)
         {
             return _openBrackets.Any(a => a.Equals(bracket));
